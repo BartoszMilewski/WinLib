@@ -1,0 +1,72 @@
+=Registry
+As we mentioned earlier, WinTest uses the computer registry to store user preferences (window size and position). The registry is divided into many branches. It is usual to store user preferences under the key "HKEY_CURRENT_USER\Software\Company Name\Application Name. Since the company that created WinTest is Reliable Software, we have encapsulated this particular key in the object Registry::ReliSoftUser.
+ namespace Registry
+ {
+    class ReliSoftUser
+    {
+    public:
+        ReliSoftUser (char const * appName)
+           : _keyMain (_keyRoot, "Software"),
+             _keyReliSoft (_keyMain, "Reliable Software"),
+             _keyApp (_keyReliSoft, appName)
+        {}
+
+        RegKey::Handle & Key () { return _keyApp; }
+
+    private:
+        RegKey::CurrentUser _keyRoot;
+        RegKey::Existing    _keyMain;
+        RegKey::New         _keyReliSoft;
+        RegKey::New         _keyApp;
+    };
+ }
+To get to the application key, one has to open its parent keys first. The top level key, HKEY_CURRENT_USER, is conveniently encapsulated as RegKey::CurrentUser. The "Software" key is always present, so we open it using RegKey::Existing. The keys "Reliable Software" and the one with the application name don't have to exist, so we open them using RegKey::New, which will create a key if it doesn't exist (if it exists, it will just access it).
+
+WinTestUser is just an example of ReliSoftUser
+ namespace Registry
+ {
+    class WinTestUser: public ReliSoftUser
+    {
+    public:
+        WinTestUser (std::string const & appName, 
+                        std::string const & keyName)
+            : ReliSoftUser (appName.c_str ()),
+            _branch (ReliSoftUser::Key (), keyName.c_str ())
+        {}
+        RegKey::Handle const & Key () const { return _branch; }
+    private:
+        RegKey::New    _branch;
+    };
+ }
+It can provide access to any subkey of WinTest key.
+
+These auxiliary classes are used by WinTestRegistry to read and modify the "MainWindow" key (or any other named window if needed), where the window placement values are stored.
+ class WinTestRegistry
+ {
+ public:
+    WinTestRegistry (std::string const & appName)
+        :_appName (appName)
+    {}
+    void ReadPlacement (Win::Placement & placement, 
+        std::string const & windowName = std::string 
+                                            ("MainWindow"))
+    {
+        Registry::WinTestUser userWin (_appName, windowName);
+        RegKey::ReadWinPlacement (placement, userWin.Key ());
+    }
+    void SavePlacement (Win::Placement const & placement, 
+        std::string const & windowName = std::string 
+                                         ("MainWindow"))
+    {
+        Registry::WinTestUser userWin (_appName, windowName);
+        RegKey::Handle key = userWin.Key ();
+        RegKey::SaveWinPlacement (placement,key );
+    }
+ private:
+    std::string _appName;
+ };
+
+ extern WinTestRegistry TheRegistry;
+
+|Next: [[Precompiled Headers]]|
+

@@ -1,0 +1,23 @@
+=Sys
+* '''Clipboard.h'''/cpp: Clipboard--encapsulation of Windows clipboard
+* '''Crypto.h'''/cpp: Windows cryptotgraphy. Crypt::String (encrypt/decrypt a string using the logged user's security), Crypt::Context, Hash, Key, KeyRC4, Streamer (encrypts/decrypts bytes into a stream)
+* '''Date.h'''/cpp: Data--year/month/day operations. Current date, comparison.
+* '''Dll.h'''/cpp: Dll--loading/unloading a DLL. Type-safe GetFunction.
+* '''GlobalUniqueName.h'''/cpp: GlobalUniqueName--GUID operations
+* '''PackedTime.h'''/cpp: PackedTimeInterval, PackedTime. Encapsulates FILETIME.
+* '''Process.h'''/cpp: Win::ProcessProxy, Win::ChildProcess. Interaction with and creation of Windows processes
+* '''RegKey.h'''/cpp: RegKey::Handle, AutoHandle (manipulations of Windows registry keys). Specific registry keys (local machine, etc.). RegKey::ValueSeq (iterating key values). RegKey::Seq (iterating keys).
+* '''Security.h'''/cpp: Security::Identifier, Acl, AccessControlList, Descriptor--file and other object security controls.
+* '''SharedMem.h'''/cpp: SharedMem--named shared memory to be used between processes.
+* '''Synchro.h'''/cpp: Windows thread synchronization primitives. Win::CritSection, Lock, Mutex, MutexLock, Event, Semaphore, TraficLight, AtomicCounter, SharedByTwo (lock free object that can be shared between two threads), SharedByTwoOwner.
+* '''SysTime.h''': Win::Time (system local time), Win::TimeZone. 
+* '''SysVer.h''': SystemVersion--access to the operating system version number.
+* '''Thread.h'''/cpp: Thread::Handle, AutoHandle. Low-level thread operations.
+* '''Timer.h''': Win::Timer--windows timer (sends timer messages to windows)
+* '''WheelMouse.h'''/cpp: IntelliMouse: support for mouse wheel in Win95 and NT 3.51
+* '''WinGlobalMem.h''': GlobalMem, GlobalBuf--safe interfaces to GlobalAlloc/Free
+* '''WinString.h''': ResString--string from a resource file.
+==RSWL Specific
+* '''Active.h'''/cpp: ActiveObject and auto_active. A generic object with a worker thread and a container for holding and destroying it.
+* '''BoundedQueue.h''': BoundedQueue--a thread-safe container for queueing objects. It blocks waiting when capacity exceeded.
+

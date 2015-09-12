@@ -1,0 +1,18 @@
+=WinTest
+==RSWL - Sample Application
+The Reliable Software Windows Library comes with the sample Windows program written using the library. The structure of the program illustrates the way RSWL is used in creating Windows applications. WinTest can be used as the starting point for your programs.
+
+You'll quickly discover how different RSWL is from other Windows libraries like MFC. The code you'll see is ''readable'' C++. We don't use strange macros or wizards. We try to use simple C++ constructs. In many cases we don't cover the whole functionality available through Windows API, but we made if very easy for the client to modify the library. Don't be afraid to do that.
+
+If you are unfamiliar with some of the Windows concepts, you can find a more general introduction in our online book [http://www.relisoft.com/book/index.htm|C++ in Action], in particular the [http://www.relisoft.com/book/win/index.htm|Windows] chapter. You'll find there also the description of the Model-View-Controller paradigm.
+* [[Main Function]]
+* [[Controller]]
+* [[View]]
+* [[Commander]]
+* [[Command Vector]]
+* [[Keyboard Accelerator]]
+* [[Dynamic Menu]]
+* [[Dialog Box]]
+* [[Registry]]
+* [[Precompiled Headers]]
+</ul>

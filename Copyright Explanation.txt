@@ -1,0 +1,11 @@
+Here's the intent of the copyright in simple language understandable to any software developer.
+
+We want you to use our Windows library, RSWL, in creating your programs, commercial or otherwise. You can sell programs created using RSWL without paying us a cent. 
+
+What we don't want is for you to distribute the source code of our library (including your modifications to it) outside of your organization (it's fine within the organization, as long as you don't remove the copyright). We just want to be able to control the distribution of RSWL sources and promote the use of Code Co-op. 
+
+To obtain RSWL source code, you have to download Code Co-op from our web site, www.relisoft.com, install it on your machine, configure it as email peer and join the RSWL project following the instructions on our web site. You don't have to buy Code Co-op license to do that! It's all FREE!
+
+If you decide that you don't want to use RSWL after all, please defect from the project.
+
+Reliable Software

@@ -1,0 +1,37 @@
+=Ctrl
+* '''Accelerator.h'''/cpp: Accel::Handle, Handler, Item (key->command mapping), Maker (collects items and creates an accelerator). Keyboard accelerator.
+* '''Button.h''': Win::Button, RadioButton, CheckBox, ButtonMaker
+* '''ComboBox.h'''/cpp: Win::ComboBox, ComboBoxMaker.
+* '''Controls.h'''/cpp: Win::CommonControlsRegistry (registering common controls with Windows), SimpleControl (base class for controls), ControlWithFont (base class for controls that use specific fonts), ControlMaker.
+* '''DatePicker.h'''/cpp: Win::DatePicker, DatePickerMaker--calendar control.
+* '''DropDown.h'''/cpp: Win::DropDown
+* '''Edit.h'''/cpp: Win::EditReadOnly, Edit, StreamEdit (edit control with std::streambuf interface), EditMaker. Edit controls.
+* '''FileGet.h'''/cpp: FileGetter, PathIter. Open File common control
+* '''FontSelector.h'''/cpp: Font::Selector--font selector control
+* '''Header.h''': Win::Header, HeaderMaker--ListView header
+* '''InfoDisp.h''': Win::InfoDisp, InfoDisplayMaker, ReadOnlyDisplay. Static text control.
+* '''ListBox.h'''/cpp: Win::ListBox::Simple, SingleSel, MultiSel, Maker--List box.
+* '''ListView.h'''/cpp: Win::ListView, Report, ReportCallback (gets item info using callbacks), ReportListing, ListViewMaker, ReportMaker, Notify::ListViewHandler.
+* '''Menu.h'''/cpp: Menu::Handle, AutoHandle, Bar, Popup, Tracker, Item, DropDown, Context, State.
+* '''Output.h'''/cpp: Out::Sink--Message box
+* '''ProgressBar.h'''/cpp: ProgressMeter, Win::ProgressBar, ProgressBarMaker. Progress bar control.
+* '''PropertySheet.h'''/cpp: Notify::PageHandler, PropPage::ControlHandler, Handler, Controller, Sheet, Navigator, Wizard, WizardHandler, HandlerSet. Property sheet and wizard controls.
+* '''Rebar.h'''/cpp: Tool::Rebar, RebarMaker, ButtonBand, Notify::RebarHandler
+* '''RichEditCtrl.h'''/cpp: Win::RichEdit, Notify::RichEditHandler.
+* '''Scroll.h'''/cpp: TxtScrollBar (line-granularity scrollbar), VTxtScrollBar, HTxtScrollBar, TxtScrollBarCtrl.
+* '''Spin.h''': Win::Spin--spin control.
+* '''Static.h''': Win::StaticText, StaticImage, StaticMaker. Static control.
+* '''StatusBar.h'''/cpp: Win::StatusBar, StatusBarMaker.
+* '''Tabs.h'''/cpp: Tab::Item, Tab::Handle, EnumeratedTabs (tab control template using enumeration for tab identification), Notify::TabHandler. Tab control.
+* '''ToolBar.h'''/cpp: Tool::Handle, Maker, Bar, Button, BarSeparator, ButtonCtrl. Toolbar control.
+* '''Tooltip.h''': Tool::Tip, TipForCtrl, Notify::ToolTipHandler.
+* '''Tree.h'''/cpp: Tree::Node, View, Maker, Notify::TreeViewHandler. Treeview control.
+
+==RSWL-Specific
+* '''Command.h'''/cpp: Cmd::Vector, Executor, Item (named command), VectorExec (executes commands from command vector). 
+* '''Focus.h'''/cpp: Focus::Sink, Ring. Remembers focus for multiple child windows.
+* '''FocusBarWin.h'''/cpp: FocusBar::Ctrl, Use. A bar that is highlighted when its associated window gets focus.
+* '''MarginCtrl.h'''/cpp: MarginController. Text margin control that can be used to select lines of text in the adjacent window.
+* '''Messages.h''': Windows messages used by RSWL
+* '''Splitter.h'''/cpp: Splitter::Ctrl, VerticalCtrl, HorizontalCtrl, UseVertical, UseHorizontal. Window splitter controls.
+

@@ -1,0 +1,42 @@
+=Top Level
+* Utilities
+** '''Algo.h''': copy_if algorithm
+** '''array_vector.h''': a vector of auto_array, StringArray--a vector of char arrays (C-strings).
+** '''auto_array.h''': non-resizable array (like auto_ptr, but with a pointer to an array)
+** '''auto_vector.h''': a vector of pointers that deals with ownership issues. To be used in concert with std::auto_ptr for [http://www.relisoft.com/resource/resmain.html|resource management].
+** '''Bit.h''': BitField--a set of 32 bits addressable using an arbitrary enumeration.
+** '''HtmlTag.h''': utility for generating HTML open/close tags
+** '''LargeInt.h''': Windows specific 64-bit integer class with conversions
+** '''LightString.h''': thin encapsulation of string stream
+** '''NamedBool.h''': a set of named Boolean flags. You can set and test them by (string) name.
+** '''PtrUtil.h''': RefCounted, RefPtr (cheap SharedPtr), TempSubstPtr, TempSubstVal (RAII objects for temporary substitutions of ptrs and values)
+** '''TriState.h''': Yes/No/Maybe enum
+** '''unmovable_vector.h''': resizable container that doesn't invalidate pointers or iterators
+* '''CmdLineScanner.h'''/cpp: simple command-line tokenizer--recognizes switch characters (/ or -), colons, and quoted/non-quoted strings.
+* '''Crc.h'''/CrcTable.cpp -- cyclic redundancy check (sophisticated checksum) calculator 
+* '''GenericIo.h''': interfaces for generic character I/O--Get/Put/Flush
+* '''Handlers.h''': Handler switches for new handler, unexpected handler, and structured exception handler.
+* '''HashTable.h'''/cpp: simple hash table
+* '''Lock.h''': exception-safe re-entrance lock. Locks and unlocks a boolean flag
+* '''StringOp.h'''/cpp: string utilities. 
+**String conversions: ToString, ToHexString, ToHexStr, ToWString, ToMBString, ToInt, HexStrToUnsigned 
+**MultiString (useful with multi-string register values), 
+**writable_string (for use with APIs that return strings by filling counted buffers), 
+**Indentation (object for indenting std::out), 
+**FormatFileSize, 
+** IsAscii, IsSpace, IsAlnum, IsAlpha, IsDigit, IsUpper, ToUpper, ToLower, IsGraph, IsEndOfLine, IsWordBreak
+**overlapped_copy, 
+**HasGuidFormat, 
+**TrimmedString (trims leading and trailing whitespace), 
+**ReplaceNullPadding, 
+**CharSet (set of char) 
+** Case insensitive utilities
+*** UpCaseTable (for locale-depended case comparison), 
+*** predicate objects: NocaleLessChar, NocaseEqualChar, NocaseLess, NocaseEqual, 
+*** predicate functions: IsNocaseEqual, NocaseCompare, IsCaseEqual
+***NocaseNameCmp (file names)
+***NocaseMap, NocaseSet
+***IsFileNameEqual, IsFileNameLess, FileNameCompare, FileNameLess, FileNameEqual
+**NamedValues
+* '''TimeStamp.h'''/cpp: CurrentTime, IsTimeOlderThan, StrTime (locale-sensitive conversion to string)
+* '''WinLibBase.h''': precompiled header file

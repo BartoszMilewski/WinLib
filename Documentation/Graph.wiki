@@ -1,0 +1,14 @@
+=Graph
+* '''BitInfo.h'''/cpp: Bitmap::FileHeader, Core, InfoHeader, Info--decoding bitmap files.
+* '''Bitmap.h'''/cpp: Bitmap::Handle, Logical, AutoHandle, Section, Compatible, Monochrome, Holder--Windows bitmap handling
+* '''Brush.h''': Brush::AutoHandle (creates solid, pattern, and hatch brushes), Holder (temporarily attaches a brush to Canvas), InstantHolder (creates and holds a brush), StockHolder (holds a stock brush), Black, Transparent (specialized stock brush holders). Brush is used for filling shapes (see Canvas)
+* '''Canvas.h'''/cpp: Win::Canvas (encapsulates Windows device context--can draw primitives: lines, ellipses, text, etc.), PaintCanvas (used during OnPaint processing), UpdateCanvas (used for painting outside of OnPaint), LockUpdateCanvas (used when LockWindwosUpdate is in effect), MemCanvas (for in-memory painting), DeviceCanvas, DesktopCanvas, PrinterCanvas.
+* '''CanvTools.h''': Win::ForegrMode, BkgrMode, TransparentBkgr--drawing modes.
+* '''Color.h''': Win::Color (encapsulates COLORREF), Color3d, ColorText (sets of colors)
+* '''Cursor.h'''/cpp: Cursor::Shape, System, Hourglass, Arrow, etc..., Holder (temporarily substitutes cursor)--mouse cursors.
+* '''Font.h'''/cpp: Font::Descriptor, Maker, Holder, ColorHolder, BkgHolder, StockObject, SysFixed, StockHolder. Font handling.
+* '''Holder.h''': Gdi::ObjectHolder--template for selecting GDI objects into canvas.
+* '''Icon.h'''/cpp: Icon::SharedMaker, SmallMaker, Std::Maker--icon manipulation.
+* '''ImageList.h'''/cpp: ImageList::Handle, AutoHandle--creating and manipulating Windows image lists.
+* '''Pen.h''': Pen::Maker, Color, Holder, InstantHolder, Pens3d, StockHolder, White, Black. Windows pens--used for drawing with Canvas.
+* '''StockObj.h''': Stock::ObjectHolder: template for selecting stock GDI objects into Canvas.

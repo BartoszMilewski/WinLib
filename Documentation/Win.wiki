@@ -1,0 +1,40 @@
+=Win
+* '''Atom.h'''/cpp: Win::GlobalAtom
+* '''Caret.h''': Win::Caret, caret operations
+* '''ControlHandler.h''': Control::Handler interface for various window controls
+* '''Controller.h'''/cpp: Win::Controller interface--major building block of any Window application. Contains virtual message handlers for Windows messages. Win::Controller::Dispatch mplements dispatching of windows messages.
+* '''Dde.h'''/cpp: Windows DDE encapsulation
+* '''Dialog.h'''/cpp: Windows modal and modeless dialogs
+** Dialog::Handle
+** Dialog::Controller
+** Dialog::ControlHandler: interface--handles messages from controls
+** Dialog::Template: for creating dialogs on the fly
+** Dialog::ModalController
+** Dialog::ModelesController
+** Dialog::Modal: creates a modal dialog
+** Dialog::ModelessMaker: creates a modeless dialog
+* '''EnumProcess.h'''/cpp: Win::EnumProcess--enumerates processes and sends messages to them.
+* '''GdiHandles.h''': handles to GDI objects like pens, accelerators, fonts, image lists, brushes, bitmaps, cursors, icons, and regions
+* '''Geom.h'''/cpp: geometrical objects--Win::Point, Win::Rect, and their specializations
+* '''Handler\s.h''': template for Windows handles-- Win::Handle and Win::AutoHandle
+* '''Help.h'''/cpp: encapsulates Windows HtmlHelp
+* '''Instance.h'''/cpp: Win::Instance--also loading instance resources (icons)
+* '''Keyboard.h'''/cpp: Keyboard::Handler--virtual methods for keyboard actions. VKey enumeration
+* '''Message.h''': Win::Message, Win::UserMessage, Win::RegisteredMessage, Win::ControlMessage, Win::NotifyMessage--sending Windows messages
+* '''Metrics.h''': non-client metrics (Font::Descriptors) from SysetmParametersInfo
+* '''Mouse.h''': Mouse::GetDoublClickTime
+* '''MsgLoop.h'''/cpp: Encapsulation of Windows message loop
+** Win::MessagePrepro
+** Win::ModalMessagePrepro: handles accelerators and dialogs, pumps and peeks messages.
+* '''Notification.h''': Notify::Handler interface for various Windows controls
+* '''OwnerDraw.h'''/cpp: OwnerDraw::Handler--for owner draw processing
+* '''Procedure.h'''/cpp: Win::Procedure, Win::SubProcedure (for window subclassing). RSWL internal implementation of Windows procedure.
+* '''Region.h'''/cpp: Windows regions. Region::Handle, Region::Elliptic, Rectangular, Rounded, and Polygonal.
+* '''SysHandle.h''': Sys::Handle--encapsulation of Window handles that are closed using CloseHandle.
+* '''TickCounter.h''': Win::TickCounter--counts processor ticks (for timings)
+* '''Utility.h''': Win::CreateData, Win::ActiveAction (window activation), Win::MouseActiveAction, Win::HitTest (where did the mouse hit occur?), Win::SystemWideFlags, Win::KeyState (shift state during mouse click), Win::ClassInfo
+* '''Win.h'''/cpp: Win::Style, Win::Style::Ex, Win::Quit, Win::Sleep, Win::Dow::Handle (encapsulates most operations that can be done with a window), Win::Placement, Win::StyleHolder (for temporary style switches), Win::PaintLock (to delay painting), Win::RedrawLock.
+* '''WinClass.h'''/cpp: Windows class-- Win::Class, Win::Class::Maker, Win::Class::TopMaker (for top-level windows)
+* '''WinMain.h'''/cpp: Win::Main (the main Windows function), Win::CommandLine.
+* '''WinMaker.h'''/cpp: the creator of windows. Win::Maker, Win::TopMaker, Win::ChildMaker, Win::PopupMaker
+* '''WinResource.h'''/cpp: Resource template for finding, loading, and locking Windows resources (contents of the resource file).

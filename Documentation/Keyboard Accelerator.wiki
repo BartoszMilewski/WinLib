@@ -1,0 +1,20 @@
+=Keyboard Accelerator
+Some commands can be accessed through keyboard shortcuts. For instance, in Code Co-op you can check out a file by pressing Ctrl+O. The shortcuts are defined in a keyboard accelerator, which in turn is described by a static table. The header file AccelTab.h simply declares this table.
+ namespace Accel
+ {
+    extern Accel::Item const Keys [];
+ }
+The table if filled with entries, in AccelTab.cpp. WinTest doesn't define any accelerator keys, so the table contains only one sentinel entry filled with zeroes. (Of course, if you don't intend to use accelerators, you don't have to define this empty table at all--just remove the accelerator code from TopCtr.)
+ namespace Accel
+ {
+    const Accel::Item Keys [] =
+    {
+        { 0, 0, 0 }
+    };
+ }
+Just to show you how the table might be filled, here's an example of an entry from Code Co-op
+    { WithCtrl,  VKey::O,  "Selection_CheckOut"},
+The first column describes the kind of shortcut: here it's "WithCtrl", which means the key has to be pressed together with the control key. The second column contains the key code (they are all enumerated in the namespace VKey)--here it's the key corresponding to letter O on the keyboard. The last column contains the symbolic name of the command (remember, all commands have symbolic names in the command vector).
+
+|Next: [[Dynamic Menu]]|
+

@@ -1,0 +1,91 @@
+==Main
+The program is called WinTest and it doesn't do anything other than to open an empty window with a simple menu and the about dialog box. However, this is not the "Hello Windows!" program, but rather a skeleton on which to build more complex Windows programs.
+
+The file main.cpp starts with a bunch of includes:
+ #include "precompiled.h"
+ #include "TopCtrl.h"
+ #include "OutSink.h"
+ #include "WinTestRegistry.h"
+ #include "Resource/resource.h"
+ #include <Win/WinMain.h>
+ #include <Win/WinClass.h>
+ #include <Win/WinMaker.h>
+ #include <Win/MsgLoop.h>
+ #include <Handlers.h>
+Note that, to speed up compilation, we use precompiled headers, a feature of the Visual Studio environment. Here's a short description of the contents of each include file.
+
+First are the program-specific client includes (we will discuss each of them in turn):
+| precompiled.h | Precompiled header |
+| TopCtrl.h | Definition of the top-level Controller that drives the main window |
+| OutSink.h | Extern declaration of TheOutput (see below) |
+| WinTestRegistry.h | Registry structure specific to WinTest |
+| Resource/resource.h | Resource IDs used in WinTest.rc |
+
+Then we have the RSWL library include files. Note that the library is divided into subdirectories, so the include statements start with the name of the directory:
+
+| Win/WinMain.h | Declaration of Win::Main, the program's entry point |
+| Win/WinClass.h | Window Class |
+| Win/WinMaker.h | Factory for making windows |
+| Win/MsgLoop.h | The message loop object |
+
+There are two global objects defined in main.cpp
+ Out::Sink TheOutput;
+ WinTestRegistry TheRegistry ("WinTest");
+The object TheOutput of class Out::Sink (Out is a namespace), is used to display message boxes (for instance the exception messages below). TheRegistry provides access to specific keys in the registry used by WinTest.
+
+The main entry point in this program is called Win::Main (Win is a namespace). It normally has the following structure:
+ int Win::Main (Win::Instance hInst, char const * cmdParam, int cmdShow)
+ {
+    try
+    {
+        ...
+    }
+    catch (Win::Exception e)
+    {
+        TheOutput.Display (e);
+    }
+    catch (...)
+    {
+        Win::ClearError ();
+        TheOutput.Display ("Internal error: Unknown exception", Out::Error);
+    }
+    return 0;
+ }
+The class Win::Exception encapsulates exceptions that are thrown by RSWL. The program displays them using the global object, TheOutput, which pops the appropriate message box.
+
+The code inside the try clause prepares the application for running and then starts pumping Windows messages.
+    // Create top window class
+    Win::Class::TopMaker topWinClass (ID_MAIN, hInst, ID_MAIN);
+    topWinClass.Register ();
+
+    // Create Window Controller (needs access to MessagePrepro)
+    Win::MessagePrepro msgPrepro;
+    TopCtrl ctrl (cmdParam, msgPrepro);
+
+    // Create top window (hidden)
+    ResString caption (hInst, ID_CAPTION);
+    Win::TopMaker topWin (caption, ID_MAIN, hInst);
+    Win::Dow::Handle appWin = topWin.Create (&amp;ctrl);
+
+    // Display top window
+    Win::Placement placement (appWin);
+    TheRegistry.ReadPlacement (placement);
+    placement.CombineShowCmd (cmdShow);
+    appWin.SetPlacement (placement);
+
+    // The main message loop
+    return msgPrepro.Pump ();
+
+The order of operations is as follows (it is determined by inter-object dependencies):
+
+* Create an object that describes the <b>Window Class</b> of the main window (the Class is a Windows concept, not to confuse with C++ class. The Class is identified by a resource ID, ID_MAIN, defined in the resource include. It will also use a class icon, identified by the same ID and defined in the resource file. The class Win::Class::TopMaker has all the defaults of a Window Class for a generic top-level window. These defaults may be modified by various methods, but in our case we don't need it. We simply register the Window Class with the system.
+* Create '''message preprocessor'''. This is the object that pre-processes all the Window messages as they show up in the message loop. We do it this early, because we want to pass it to the controller.
+* Create the '''controller''' object for processing messages that Windows sends to the Window procedure (Window procedure itself is hidden in the library--it simply decodes all messages and calls the appropriate virtual methods of the controller). Our particular controller object requires access to the message preprocessor (it will be explained later).
+* Create a '''window maker''' (factory) for the top-level window. The constructor of TopMaker sets all the appropriate defaults; which, again, can be overridden using specific methods, but we don't do it here. The window's caption is stored in the resource file under the ID of ID_CAPTION. We retrieve this string by creating an object of the class ResString. The Create method of window maker returns a window handle. A handle to a window is encapsulated in the class Win::Dow::Handle. The window is created invisible (hidden).
+* Users always expect an application to remember window position and size. We use the object '''Win::Placement''' to store those parameters. We read them from the registry (using TheRegistry object). The placement also contains the maximize/minimize flags. These flags can be overridden by the command-line parameter, cmdShow. This requirement is taken into account in the method CombineShowCmd. The method SetPlacement applies the placement to the window and also makes it visible.
+*Call the '''Pump''' method of the message preprocessor. This method will keep looping, retrieving Windows messages, preprocessing them (translating accelerators, for instance) and sending them to our controller.
+
+Most of the interesting work is done in the controller.
+
+| Next: [[Controller]]|
+

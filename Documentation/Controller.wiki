@@ -1,0 +1,262 @@
+=Controller
+The architecture of an RSWL program is based on the Model-View-Controller pattern. The Controller is the part that interprets user input.
+
+When the user interacts with a Windows application, the system sends messages to the program. These messages are first pre-processed in the message loop (previous page), and then dispatched to the Window Procedure. RSWL implements a general Window Procedure, which calls the appropriate methods of the Controller. An RSWL program is supposed to implement its own Controller, which inherits from Win::Controller and overrides some of its virtual methods. Which methods are overridden depends on what Windows messages your application wants to process.
+
+In WinTest the client controller is called TopCtrl (it controls the top-level window). Let's look at the header file first. It starts with some includes and forward declarations.
+ #include "CmdVector.h" // CmdVector is a typedef, not a class
+ #include <Win/Controller.h>
+ #include <Win/Message.h>
+ #include <Ctrl/Accelerator.h>
+ namespace Win { class MessagePrepro; }
+ namespace Hierarchy { class Controller; }
+ class Commander;
+ class View;
+Things worth noticing are: We had to include, rather than forward declare, CmdVector.h; because the object it defines, CmdVector, is not a class but a typedef (we'll discuss it later). To forward declare classes that are defined in namespaces, we have to enclose them in their respective namespaces.
+
+This is the interface of TopCtrl:
+ class TopCtrl: public Win::Controller
+ {
+ public:
+    TopCtrl (char const * cmdLine, Win::MessagePrepro & msgPrepro);
+    ~TopCtrl ();
+    Notify::Handler * GetNotifyHandler (Win::Dow::Handle winFrom, 
+                                        unsigned idFrom)throw ();
+    bool OnCreate (Win::CreateData const * create, bool & success) throw ();
+    bool OnDestroy () throw ();
+    bool OnSize (int width, int height, int flag) throw ();
+    bool OnRegisteredMessage (Win::Message & msg) throw ();
+    bool OnInitPopup (Menu::Handle menu, int pos) throw ();
+    bool OnMenuSelect (int id, Menu::State state, Menu::Handle 
+                                         menu) throw ();
+    bool OnCommand (int cmdId, bool isAccel) throw ();
+}
+TopCtrl implements (overrides) several message handlers. Notice that these handlers are called with meaningful arguments. For instance, when a window is resized, the system calls the OnSize method with the width and the height of the resized window (there is also a flag, which we will ignore). These parameters have been extracted from the traditional wParam and lParam parts of Window message WM_SIZE by our library.
+
+To see the signatures of message handlers you'd like to override, study the file Controller.h in the Win subdirectory of RSWL. If you are curious about what handlers correspond to which Windows messages, look at the Win::Controller::Dispatch method in the Controller.cpp file therein.
+
+TopCtrl also has two private methods used internally, and a bunch of data members.
+ private:
+    void OnInit ();
+    void MenuCommand (int cmdId);
+private:
+    bool                               _ready;
+    std::string                        _cmdLine;
+    Win::MessagePrepro               & _msgPrepro;
+    Win::RegisteredMessage             _initMsg;
+    std::auto_ptr<Commander>           _commander;
+    std::auto_ptr<CmdVector>           _cmdVector;
+    Accel::AutoHandle                  _kbdAccel;
+    std::auto_ptr<Menu::DropDown>      _menu;
+    std::auto_ptr<View>                _view;</pre>
+The flag _ready is turned on when all the initializations have been done. The string _cmdLine is here in case we want to do something with it (at this point WinTest displays it in the title bar of the main window). The reference to the message preprocessor will be needed by the accelerator. We create a special registered message that we will use for internal communication in the controller.
+
+Then there are some objects that are owned by the controller through smart pointers. These objects can only be created during the processing of OnCreate, when the handle to the main window is known by the system. Note that when the controller, TopCtrl, is created in main, the window handle is still unknown--the window hasn't even been created.
+
+Commander is responsible for executing all user commands, whether they have been triggered through the menu, the accelerator, or a toolbar.
+
+The Command Vector dispatches commands to the appropriate methods of the Commander.
+
+The auto-handle owns the handle to the keyboard accelerator--it will make sure that the accelerator is destroyed when the Controller dies.
+
+The drop-down menu object represents the top-level menu.
+
+The view is part of the Model-View-Controlle paradigm. It is responsible for displaying program data.
+
+The Model itself is absent, because WinTest doesn't perform any actions or hold any data. In general, though, the Model is the part of an application that is independent of the UI. It could, for instance, be a document, a database, an organized list of downloaded songs, etc.
+
+==Implementation
+The construction and destruction of the top controller are pretty straightforward. Note the construction of _initMsg which registers a message called "InitMessage". It will be our own private message that we can send to ourselves.
+ TopCtrl::TopCtrl (char const * cmdLine, Win::MessagePrepro & msgPrepro)
+ : _initMsg ("InitMessage"),
+  _msgPrepro (msgPrepro),
+  _ready (false),
+  _cmdLine (cmdLine)
+ {}
+
+ TopCtrl::~TopCtrl ()
+ {}
+The real initialization of the application happens in the OnCreate method, which is called by Windows right before the window is ready to be displayed (OnCreate is the handler for the WM_CREATE Windows message). The important thing to know is that in OnCreate we get access to the actual window handle for the first time.
+
+It is very important to catch all the exceptions within OnCreate. This is also true of all message handlers--the methods that start with "On"--they can't throw any exceptions. OnCreate takes a boolean "success", which is set to false when an exception occurs (when it's false, the window creation fails and the program exits). Otherwise it is set to true. The return value of OnCreate is always true--it means that we have processed the message, successfully or not.
+ bool TopCtrl::OnCreate (Win::CreateData const * create, bool & success) throw ()
+ {
+    Win::Dow::Handle win = GetWindow ();
+    ResString caption (win.GetInstance (), ID_CAPTION);
+    try
+    {
+        TheOutput.Init (0, caption);
+        win.SetText (caption);
+        _commander.reset (new Commander (*this));
+        _cmdVector.reset (new CmdVector 
+                              (Cmd::Table, _commander.get ()));
+        Accel::Maker accelMaker (Accel::Keys, *_cmdVector);
+        _kbdAccel = accelMaker.Create ();
+        _msgPrepro.SetKbdAccelerator (win, _kbdAccel);
+        _menu.reset (new Menu::DropDown 
+                                 (Menu::barItems, *_cmdVector));
+        _menu->AttachToWindow (win);
+        _view.reset (new View (win));
+
+        win.PostMsg (_initMsg);
+        success = true;
+    }
+    catch (Win::Exception e)
+    {
+        TheOutput.Display (e);
+        success = false;
+    }
+    catch (...)
+    {
+        Win::ClearError ();
+        TheOutput.Display ("Initialization -- Unknown Error", 
+                                                Out::Error);
+        success = false;
+    }
+    TheOutput.Init (win, caption);
+    _ready = true;
+    return true;
+ }
+First we retrieve the window handle, which have just been initialized by the system. It is stored in the controller and can be accessed by calling its GetWindow method. One of the things we can do with this handle is to retrieve the application's instance handle through it. Here we need the instance handle in order to retrieve the caption string from program resources.
+
+TheOutput object is then initialized with the program caption, which will then be displayed in the title bar of all message boxes. We still don't give TheOutput our window handle, in case the initialization fails and the window is never displayed. We give it to TheOutput only at the end of OnCreate, when we set the _ready flag.
+
+Window handle has a method SetText, which is used to set the text in its title bar.
+
+The order of initialization in OnCreate is often important, because various objects depend on each other.
+* Commander depends on the Controller itself--hence the *this argument.
+* Command vector is initialized using a (global) table of commands, Cmd::Table, and the Commander. It will be used to translate command names into Commander calls.
+* Keyboard accelerator is created using Accel::Maker, which takes a (global) table, Accel::Keys, and the command vector. The method Create returns an auto-handle to the accelerator object. The accelerator becomes active once it's passed to the message preprocessor (it is used in the Windows API TranslateAccelerator).
+* Menu is initialized using a (global) table, Menu::barItems, and the command vector. The menu is then attached to the window.
+* The View might need access to the window handle, in case it wants to draw something outside of OnPaint.
+* Finally we post our special registered message "InitMessage". What it means is that Windows will call us later with this message and we'll get a chance to process it in OnRegisteredMessage. This is a useful trick that splits the initialization of the top window between two messages. We want the window to be visible immediately after OnCreate, so we don't want to overburden OnCreate with some time-consuming initialization tasks (like reading in files, or opening databases, etc.--things usually done by the Model). Note that the window cannot be displayed until OnCreate returns.
+
+Here's the simple implementation of OnRegisteredMessage
+ bool TopCtrl::OnRegisteredMessage (Win::Message & msg) throw ()
+ {
+    if (msg == _initMsg)
+    {
+        OnInit ();
+        return true;
+    }
+    return false;
+ }
+As in any message handler, the return value 'true' means that we have accepted the message as addressed to us. Otherwise the return value of 'false' tells RSWL to call the system to do the default processing (to call the API DefWindowProc).
+
+Here's the example of OnInit:
+ void TopCtrl::OnInit ()
+ {
+    GetWindow ().SetText (_cmdLine.c_str ());
+ }
+This code is here just for testing. It sets the window title to the contents of the command line. The commented-out code opens a debug log on the desktop.
+
+Normally, we would put Model initialization code here (and possibly display the hourglass cursor).
+
+OnDestroy is called when the window is closed. We use this opportunity to save our window placement data in the registry. Since the closing of the top-level window is equivalent to the closing of the application, we have to call Win::Quit. This call will stop the message pump and cause Win::Main to exit.
+ bool TopCtrl::OnDestroy () throw ()
+ {
+    try
+    {
+        Win::Placement placement (GetWindow ());
+        TheRegistry.SavePlacement (placement);
+    }
+    catch (...)
+    {}
+    Win::Quit ();
+    return true;
+ }
+OnSize is called when the user resizes the window. In most cases the controller will just pass this call to the view.
+ bool TopCtrl::OnSize (int width, int height, int flag) throw ()
+ {
+    if (_ready)
+        _view->Size (width, height); 
+    return true;
+ }
+RSWL menus are dynamic. When the user clicks on any of the items in the menu bar, a popup menu is created on the fly. This happens in the OnInitPopup handler by calling the RefreshPopup method of the menu object. The popup is created from a table (described later) that was passed to the menu constructor in OnCreate.
+ bool TopCtrl::OnInitPopup (Menu::Handle menu, int pos) throw ()
+ {
+    try
+    {
+        _menu->RefreshPopup (menu, pos);
+    }
+    catch (...) 
+    {
+        Win::ClearError ();
+        return false;
+    }
+    return true;
+ }
+RSWL also associates help strings with each menu item. These strings may, for instance, be displayed it the status bar. Here, in response to menu selection (but before clicking on it), we retrieve the help string but don't do anything with it.
+ bool TopCtrl::OnMenuSelect (int id, Menu::State state, Menu::Handle menu) throw ()
+ {
+    if (state.IsDismissed ())
+    {
+        // Menu dismissed
+    }
+    else if (!state.IsSeparator () && !state.IsSysMenu () && 
+                                              !state.IsPopup ())
+    {
+        // Menu item selected
+        char const * cmdHelp = _cmdVector->GetHelp (id);
+    }
+    else
+    {
+        return false;
+    }
+    return true;
+ }
+When a window contains Window controls, user actions are translated by the system into notifications (WM_NOTIFY message). Since each type of control has a different behavior, the client is supposed to implement a notification handler (which is like a mini-controller) for that particular Window contol. Such notification handlers are defined in RSWL--the client only has to override particular methods. This is very similar to overriding the controller methods.
+
+WinTest doesn't have any controls, so it doesn't have to implement the GetNotifyHandler method. But just to illustrate the principle, it is overridden here.
+ Notify::Handler * TopCtrl::GetNotifyHandler (Win::Dow::Handle winFrom, unsigned idFrom) throw ()
+ {
+    return 0;
+ }
+User commands usually come from the menu or through the keyboard accelerator. OnCommand is a handler for WM_COMMAND messages.
+ bool TopCtrl::OnCommand (int cmdId, bool isAccel) throw ()
+ {
+    if (isAccel)
+    {
+        // Revisit: maybe we should have Test method that 
+        // takes cmdId?
+        // Keyboard accelerators to invisible or disabled menu 
+        // items are not executed
+        char const * name = _cmdVector->GetName (cmdId);
+        if (_cmdVector->Test (name) != Cmd::Enabled)
+            return true;
+    }
+    MenuCommand (cmdId);
+    return true;
+ }
+We can never get OnCommand from a disabled menu item, but we usually don't disable keyboard accelerators. So here, for accelerators, we do an additional test to find out if the particular command is disabled in the menu. All enabled commands are redirected to the private method MenuCommand.
+ void TopCtrl::MenuCommand (int cmdId)
+ {
+    Win::ClearError ();
+    try
+    {
+        _cmdVector->Execute (cmdId);
+    }
+    catch (Win::ExitException e)
+    {
+        TheOutput.Display (e);
+        _h.Destroy ();
+    }
+    catch (Win::Exception e)
+    {
+        TheOutput.Display (e);
+    }
+    catch (std::bad_alloc bad)
+    {
+        Win::ClearError ();
+        TheOutput.Display ("Operation aborted: not enough memory.");
+    }
+    catch (...)
+    {
+        Win::ClearError ();
+        TheOutput.Display ("Internal Error: Command execution 
+                                           failure", Out::Error);
+    }
+ }
+MenuCommand is the place where all commands are executed. Commands might require some heavy work, which can throw all kinds of exceptions. These are all caught and displayed here. The actual dispatching of commands is done inside the command vector (note that the command vector has access to the Commander object, which can execute the commands).
+
+| Next: [[View]]|

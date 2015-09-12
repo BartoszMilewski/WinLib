@@ -1,0 +1,17 @@
+=Mail
+* '''Base64.h'''/cpp: Base64::Encode, Decoder. Base64 encodes binary data as ASCII text for transmittal through email protocols.
+* '''EmailAddress.h'''/cpp: Email::IsValidAddress. Checks syntax validity of email address.
+* '''HeaderSeq.h'''/cpp: HeaderSeq. Parses through email header.
+* '''Mime.h'''/cpp: MIME::Headers. Encapsulates MIME headers in email.
+* '''MsgParser.h'''/cpp: Pop3::Parser. Parses email message.
+* '''MsgTree.h'''/cpp: Header, MessagePart, MultipartMixedPart, PlainTextPart, ApplicationOctesStreamPart. Create a multi-part message and send it to a socket.
+* '''Pop3.h'''/cpp: Pop3::Exception, SingleLineResponse, MultiLineResponse, Connection, Session, MessageRetriever, Input. Receives POP3 messages from a sesion.
+* '''Pop3CharBlockSeq.h''': Pop3::CharBlockSeq. Converts output from LineSeq to a sequence of characters. Stops at end of input, empty line, or a line starting with '-', ' ', or '.'
+* '''Pop3Message.h'''/cpp: Pop3::Attachment, Message. Pop3::Message is the sink for the Pop3::Parser. 
+* '''Sink.h''': Pop3::Sink. Pure interface for a Pop3::Parser sink.
+* '''Smtp.h'''/cpp: Smtp::Response, Connection, Session. Infrastructure for sending email messages using SMTP.
+* '''SmtpMessage.h'''/cpp: Smtp::Message. Create and send an email message to a socket.
+* '''SmtpUtils.h'''/cpp: Smtp::Output, LineBreakingSeq.
+==Examples
+* Using [[SMTP]]
+

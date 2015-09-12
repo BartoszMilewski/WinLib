@@ -1,0 +1,6 @@
+=XML
+* '''Scanner.h'''/cpp: XML::Scanner. Converts input stream to tokens.
+* '''Sink.h'''/cpp: XML::Error, Sink. XML::Sink is a pure interface for a sink for the XML parser.
+* '''XmlParser.h'''/cpp: XML::Parser. Parses a stream of tokens from XML::Scanner and outputs recognized structures into the sink.
+* '''XmlTree.h'''/cpp: XML::Exception, Attribute, Node, Tree, TreeMaker. XML::TreeMaker is a sink for the XML::Parser. It creates a tree of XML::Nodes. 
+

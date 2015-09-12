@@ -1,0 +1,15 @@
+=Parse
+* '''BufferedStream.h'''/cpp: BufferedStream, LineBreaker. A framework for an input stream with lookahead.
+* '''NamedPair.h''': NamedPair. Name/Value pair template. Parses a string into a pair, looking for specific delimiters and stripping quotation marks.
+ template<char delimiter, char endDelimiter = '\0', char quotMark = '"'>
+Examples:
+|! Template args |! Parses |
+| 
+ <'='> | 
+ foo = "bar" |
+| 
+ <':'> | 
+ foo:bar |
+| 
+ <'=', ';'> | 
+ foo = bar; |

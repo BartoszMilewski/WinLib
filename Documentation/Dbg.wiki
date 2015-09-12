@@ -1,0 +1,9 @@
+==Dbg
+Debugging infrastructure.
+* '''All.h''': Includes Assert.h, Memory.h, and Out.h
+* '''Assert.h'''/cpp: Assert macro
+* '''Log.h'''/cpp: Dbg::Log, logs all debugging output to file (see Out.h)
+* '''Memory.h'''/cpp: Dbg::LeakTrack, NoMemoryAllocations. Tracking memory leaks.
+* '''Monitor.h'''/cpp: Dbg::Monitor. Attaches to an external monitor process and sends messages to it.
+* '''Out.h'''/cpp. Debug output stream ''dbg''. Sends formatted output to the debugger and to external monitor or log.
+

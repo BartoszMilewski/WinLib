@@ -1,0 +1,19 @@
+=File
+* '''Dir.h'''/cpp: FileSeq, FileMultiSeq, DirSeq. Sequencers for listing directories.
+* '''Drives.h'''/cpp: LogicalDrives, DriveInfo. Listing logical drives.
+* '''File.h'''/cpp: File, FileInfo, FileInfoWritable, FileTime, FileVersion. File operations, including creation, renames, attributes, etc.
+* '''FileCopier.h'''/cpp: FileCopier. Copies a set of files using shell.
+* '''FileIo.h'''/cpp: FileIo (low-level file interface: read, write, set/get position), OutStream, InStream (standard file streams).
+* '''FileSizer.cpp''': File methods using 64-bit file size.
+* '''FolderWatcher.h'''/cpp: FileChangeEvent, FolderChangeEvent, TreeChangeEvent, FolderWatcher, MultiFolderWatcher. ActiveObjects (threads) observing directory changes. Post windows messages to notify about changes.
+* '''MemFile.h'''/cpp: MemFile, MemFileReadOnly, MemFileNew, MemFileExisting, MemFileAlways, LokFile. Memory mapped files
+* '''Path.h'''/cpp: FilePath, TmpPath, CurrentFolder, ProgramFilesPath, SystemFilesPath, FilePathSeq, PartialPathSeq, FullPathSeq (iterates over path segments), PathSplitter (splits path into drive, dir, file name, and extension), PathMaker (recreates split path), DirecotryListing (creates a string vector of files in a directory). Operations on paths.
+* '''Vpath.h'''/cpp: Vpath--stores a path as a vector of strings.
+* '''WildCard.h'''/cpp: Matcher, FileMatcher, FileMultiMatcher. Matches file names using wildcards (*, ?).
+
+==RSWL Specific
+* '''ErrorLog.h'''/cpp: Dbg::LogStream, SetLogPath, PushState, PopState, WriteError. Error logging.
+* '''LongSequence.h'''/cpp: LongSequence--a container that uses file mapping to store long sequences of objects. 
+* '''SafePaths.h'''/cpp: SafePaths--stores file paths, deletes them in its destructor.
+* '''SerialUnVector.h''': unmovable_vector that can be serialized to disk.
+

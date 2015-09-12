@@ -1,0 +1,40 @@
+=Dialog Box
+WinTest has one simple dialog box, the about box. It looks like this:
+
+[[Image:About]]
+
+Its only controls are two buttons. One says "Visit our web site!" and the other says "OK". You can view and edit this dialog box in your development environment. What is important is that each control, and the dialog box itself, are assigned numerical IDs, which are #defined in the file "resource.h". The dialog has the ID IDD_ABOUT, the "visit!" button, IDB_RELISOFT, and the OK button, IDOK (Important: this is the standard ID for the default OK button).
+
+The behavior of the dialog is defined by its controller. The client controller usually overrides the methods OnControl and OnApply (and often OnCancel).
+ class AboutDlgCtrl : public Dialog::ModalController
+ {
+ public:
+    AboutDlgCtrl () : Dialog::ModalController (IDD_ABOUT) {}
+    bool OnControl (Win::Dow::Handle win, int ctrlId, 
+                                        int notifyCode) 
+             throw (Win::Exception);
+    bool OnApply () throw ();
+ };
+The OnControl method is the workhorse of any dialog. It is usually implemented as a switch on the IDs of various controls.
+ bool AboutDlgCtrl::OnControl (Win::Dow::Handle win, int ctrlId, int notifyCode) 
+         throw (Win::Exception)
+ {
+    switch (ctrlId)
+    {
+    case IDB_RELISOFT:
+        ShellMan::Open (win, "http://www.relisoft.com");
+        return true;
+    }
+    return false;
+ }
+When the user click on the "Visit!" button (whose ID is IDB_RELISOFT), we call the shell to open our web site. The shell is pretty intelligent about the things it can open. If you pass it a URL, it will call the browser.
+
+Note that IDOK (as well as IDCANCEL) are treated in a special way. Instead of being passed to OnControl, they have their own handlers. The handler for the IDOK button is OnApply. It closes the dialog box by calling its EndOk method (you can also override the EndCancel method if you have a Cancel button).
+ bool AboutDlgCtrl::OnApply () throw ()
+ {
+    EndOk ();
+    return true;
+ }
+
+|Next: [[Registry]]|
+

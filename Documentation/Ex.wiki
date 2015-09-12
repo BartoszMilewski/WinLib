@@ -1,0 +1,8 @@
+=Ex
+* '''Error.h'''/cpp: LastSysError (formats Windows GetLastError), SysMsg (decodes error codes).
+* '''WinEx.h'''/cpp: Win::Exception, CommDlgException, InternalException, Assume (like assert, but stays in the release build and throws an exception). 
+==Usage
+* Use Win::Exception after failed calls to Windows API (extracts GetLastError). 
+* Use Win::InternalException otherwise. 
+* One catch (Win::Exception e) will catch both. Use [[Ctrl|TheOutput]] to display exceptions.
+

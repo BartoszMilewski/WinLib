@@ -1,0 +1,27 @@
+=Command Vector
+Command Vector is a table of commands. The client initializes a static table and the rest of the work is done by RSWL. Below is the usual content of the CmdVector header file. It declares an extern table and a type. The type is just an instantiation of the RSWL template for the particular type of Commander.
+ namespace Cmd
+ {
+    extern Cmd::Item&lt;Commander&gt; const Table [];
+ }
+
+ typedef Cmd::VectorExec&lt;Commander&gt; CmdVector;
+The table that drives the command vector looks like this:
+ namespace Cmd
+ {
+   Cmd::Item&lt;Commander&gt; const Table [] =
+   {
+     {"Program_Exit", &Commander::Program_Exit,
+                      &Commander::can_Program_Exit,"Exit program"},
+     {"Program_About",&Commander::Program_About, 0, "About"},
+     {0, 0, 0}
+   };
+ }
+The first column contains the symbolic name of the command (here, we just derived the name from the menu item). The names are used in string-driven dispatching (it makes the life of the programmer so much easier--see menu and accelerator tables). The second column contains the pointer to the appropriate member function of our Commander that executes the command. The third entry contains the pointer to the "can" method that controls the dynamic enabling/disabling of the entry (if the pointer is null, the command is always enabled). The last column contains the help string. The last, sentinel, row of the table must be filled with zeros.
+
+So what happens when the user selects a command from the menu? First, the user has to click on the top-level item, "Program" in this case. This results in the call to TopController::OnInitPopup. We call the menu's method RefreshPopup, which prepares the popup menu with the items from the menu table (to be described later). The menu has access to the command vector, so it asks it for the visibility of individual items by calling the "can" methods of the Commander. Once the popup menu is displayed, and the user clicks on any item, TopController::OnCommand is called. OnCommand calls MenuCommand, which calls CmdVector::Execute, and the appropriate method of the Commander is executed.
+
+The execution of keyboard accelerators and toolbar items proceeds along the same lines. In the end CmdVector::Execute is always called.
+
+|Next: [[Keyboard Accelerator]]|
+

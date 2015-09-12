@@ -1,0 +1,81 @@
+=Using SMTP
+This is an example how to use the RSWL encapsulation of SMTP to send a message. Note that this code works with or without SSL (Secure Socket Layer). Gmail, for instance, requires SSL. Your personal mail server may not--just set the useSSL flag accordingly.
+
+Let's start with initializing account data. This is a ficticious account, so make appropriate changes.
+    std::string server = "smtp.gmail.com";
+    // Default SMTP port is 25
+    // Gmail uses port 465, but port 25 will also work
+    short port = 465; 
+    bool useSSL = true;
+    std::string domain = "MyComputerName";
+Nowadays, most SMTP accounts require authentication:
+    bool needsAuth = true;
+    std::string user = "ChadCodewell@gmail.com";
+    std::string pass = "n00b";
+This is the sender of the message:
+    std::string senderName = "Chad Codewell";
+    std::string senderAddress = "ChadCodewell@gmail.com";
+This is the recipient:
+    std::string recipientAddress = "EmilyCodewell@gmail.com";
+Initialize the sockets subsystem (this could be done once per program, but the WinSock object has to be kept alive for the duration, because its destructor de-initializes the sockets.
+    WinSocks    socks;
+Let's establish a connection with the server:
+    Smtp::Connection connection (server, port);
+And open a session, in this case we also have to authenticate ourselves:
+    Smtp::Session session (connection, domain, useSSL);
+    if (needsAuth)
+        session.Authenticate (user, pass);
+Here's our socket that pipes directly into the server:
+    Socket & socket = session.GetSocket ();
+Start a mail transaction, so that we can clean up after ourselves in case of exception.
+    Smtp::MailTransaction transact (socket);
+Tell the server who the sender of the message is. Note the send/response patters that is characteristic to many internet protocols.
+    std::string mailFromCmd = "MAIL FROM: ";
+    mailFromCmd += ToBracketedString (senderAddress);
+    socket.SendLine (mailFromCmd.c_str ());
+    Smtp::Response mailfromResponse (socket);
+    if (mailfromResponse.GetStatus () != Smtp::Response::Ok)
+        throw Win::InternalException ("SMTP: cannot initiate send transaction.", 
+                                      mailfromResponse.c_str ());
+Tell server who the recipient is. For multiple recipients, repeat this in a loop:
+    std::string bracketedAddr = ToBracketedString (recipientAddress);
+    std::string rcptToCmd = "RCPT TO: ";
+    rcptToCmd += bracketedAddr;
+    socket.SendLine (rcptToCmd.c_str ());
+    Smtp::Response rcpttoResponse (socket);
+    int status = rcpttoResponse.GetStatus ();
+    if (status != Smtp::Response::Ok)
+    {
+        if (status == Smtp::Response::BadEmailAddress)
+        {
+            std::string info = "to: " + recipientAddress;
+            info += "\n\n";
+            info += rcpttoResponse.GetComment ();
+            throw Win::InternalException ("Cannot e-mail a script", info.c_str ());
+        }
+        else
+        {
+            throw Win::InternalException ("SMTP: recipient not accepted by server.",
+                                          rcpttoResponse.c_str ());
+        }
+    }
+Prepare the server to receive the content of the message:
+    socket.SendLine ("DATA");
+    Smtp::Response dataResponse (socket);
+    if (dataResponse.GetStatus () != Smtp::Response::DataCmdOk)
+        throw Win::InternalException ("SMTP: server refused to accept the message.",
+                                      dataResponse.c_str ());
+An SMTP message may contain many parts, in fact is it built like a tree. Here we only use one part: PlainText:
+    Smtp::Message smtpMsg (senderName, senderAddress, "Test Message");
+
+    std::auto_ptr<MessagePart> plainText (new PlainTextPart ("This is a test."));
+    smtpMsg.AddBody (plainText);
+
+    smtpMsg.Send (socket);
+
+    Smtp::Response dataendResponse (socket);
+    if (dataendResponse.GetStatus () != Smtp::Response::Ok)
+        throw Win::InternalException ("SMTP: server did not accept the message.",
+                                      dataendResponse.c_str ());
+If we are here, there were no errors, so let's commit the transaction.
+    transact.Commit ();

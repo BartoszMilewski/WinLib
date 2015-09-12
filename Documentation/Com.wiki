@@ -1,0 +1,11 @@
+=Com
+* '''Automation.h'''/cpp: Automation::CoObject, SObject, DispObject, SFace, SObjFace, Bool, BString, CString, TypeLibrary, TypeInfo. Automation COM interfaces.
+* '''Com.h''': Com::Use (initialize/deinitialize COM subsystem), MainUse (main thread COM initialization), UseOle (Ole (un-)/initialization). UnknownPtr (IUnknown encapsulation), IFacePtr (template interface pointer with reference counting).
+* '''DragDrop.h'''/cpp: Win::FileDropPackage, FileDrop, FileDragDrop. Drag/Drop interfaces.
+* '''Shell.h'''/cpp: ShellMan::Ptr, 
+** Folders: Desktop, FolderBrowser, Folder, DrivesPath, NetworkPath, UserProgramsFolder, VirtualDesktopFolder, CommonDesktopFolder, UserDesktopFolder, CommonStartupFolder, UserStartupFolder, PersonalFolder, 
+** Link, PersistFile, ShortCut, FileInfo, AssociatedCommand
+** Shell operations with UI: Explore, Open, Properties, Execute, FindExe, Delete, QuietDelete, DeleteContents, CopyContents, CopyFiles, DeleteFiles, FileMove.
+* '''ShellRequest.h'''/cpp: ShellMan::FileRequest, CopyRequest. Bulk file operations.
+* '''TaskBarIcon.h'''/cpp: TaskbarIcon, TaskbarIconNotifyHandler. Interfacing with a taskbar icon.
+

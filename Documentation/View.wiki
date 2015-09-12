@@ -1,0 +1,28 @@
+=View
+The View is the part of Model-View-Controller that takes care of displaying data. There isn't much to display in WinTest, so the implementation is rather trivial.
+ class View
+ {
+ public:
+    View (Win::Dow::Handle win);
+    void Size (int width, int height) throw ();
+ private:
+    Win::Dow::Handle    _win;
+    int _xPix;
+    int _yPix;
+ };
+The view usually keeps the handle to the window in which it is supposed to paint, as well as the current size of the client area of the window.
+
+Here's the trivial implementation of our View--just for illustration purposes.
+ View::View (Win::Dow::Handle win)
+    : _win (win),
+      _xPix (0),
+      _yPix (0)
+ {
+ }
+
+ void View::Size (int width, int height) throw ()
+ {
+    _xPix = width;
+    _yPix = height;
+ }
+| Next: [[Commander]]|

@@ -1,0 +1,47 @@
+=Dynamic Menu
+The menu system is mostly implemented inside RSWL. All the client needs to do is to fill out some tables.
+
+The include file contains just the forward declaration of the static top-level table, Menu::barItems.
+ namespace Menu
+ {
+    extern const Item barItems [];
+ };
+The implementation file defines the menu bar items, each of them leading to a popup menu. In WinTest there is only one menu bar item, Program.
+ namespace Menu
+ {
+    const Item barItems [] =
+    {
+        {POP,   "&Program",        "Program",    programItems},
+        {END,    0,                0,            0}
+    };
+ };
+The first column defines the type of the menu, in this case it's a pop-up menu. The second column contains the display string. Use the ampersand, &, before the letter that will become the menu shortcut key for that item (here it's the letter 'P'). Menu shortcuts are used for keyboard navigation. The third column contains the symbolic name for the command (in this case,  since it just opens a popup menu, no command is executed). The fourth column contains the pointer to the popup menu table.
+
+The popup definition uses the same Menu::Item objects.
+ namespace Menu
+ {
+    const Item programItems [] =
+    {
+        {CMD,        "&Exit",            "Program_Exit", 0},
+        {CMD,        "&About...",        "Program_About", 0},
+        {SEPARATOR,  0,                  0, 0},
+        {POP,        "&Submenu",         0,  subItems},
+        {END,        0,                  0, 0}
+    };
+ };
+This time we have more variety. Command items, CMD, contain actual symbolic names of commands defined in the Command Vector. There is a "Program_Exit" command and a "Program_About" command. They are followed by a separator and, just for the heck of it, a submenu. A submenu entry has, in the last column, a pointer to the submenu table.
+ namespace Menu
+ {
+    const Item subItems [] =
+    {
+        {CMD,        "&Exit",      "Program_Exit", 0},
+        {CMD,        "&About",     "Program_About", 0},
+        {END,        0,            0}
+    };
+ };
+Here the submenu contains the same commands as the Program menu, because there wasn't much to chose from.
+
+Note that all tables are terminated by a sentinel entry with the END tag. Also, in the actual source file, the tables are defined in the reverse order, because of their inter-dependencies.
+
+|Next: [[Dialog Box]]|
+

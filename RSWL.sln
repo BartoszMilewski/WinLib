@@ -1,0 +1,62 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RSWL", "RSWL.vcproj", "{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinTest", "WinTest\WinTest.vcproj", "{5D67255F-DD57-4319-BB6E-8D1E13289D3A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7} = {1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcproj", "{C61F8D27-EB70-4106-A770-246D473327AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7} = {1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 4
+		SccProjectName0 = RSWL
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Reliable\u0020Software\u0020Code\u0020Co-op
+		CanCheckoutShared = true
+		SccProjectUniqueName1 = RSWL.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+		SccProjectUniqueName2 = WinTest\\WinTest.vcproj
+		SccLocalPath2 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection2 = WinTest\\
+		SccProjectUniqueName3 = UnitTest\\UnitTest.vcproj
+		SccLocalPath3 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection3 = UnitTest\\
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Beta|Win32 = Beta|Win32
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}.Beta|Win32.ActiveCfg = Beta|Win32
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}.Beta|Win32.Build.0 = Beta|Win32
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}.Debug|Win32.Build.0 = Debug|Win32
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}.Release|Win32.ActiveCfg = Release|Win32
+		{1A03B0D3-2428-4DC3-9C12-AB1ACCB1CFC7}.Release|Win32.Build.0 = Release|Win32
+		{5D67255F-DD57-4319-BB6E-8D1E13289D3A}.Beta|Win32.ActiveCfg = Release|Win32
+		{5D67255F-DD57-4319-BB6E-8D1E13289D3A}.Beta|Win32.Build.0 = Release|Win32
+		{5D67255F-DD57-4319-BB6E-8D1E13289D3A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5D67255F-DD57-4319-BB6E-8D1E13289D3A}.Debug|Win32.Build.0 = Debug|Win32
+		{5D67255F-DD57-4319-BB6E-8D1E13289D3A}.Release|Win32.ActiveCfg = Release|Win32
+		{5D67255F-DD57-4319-BB6E-8D1E13289D3A}.Release|Win32.Build.0 = Release|Win32
+		{C61F8D27-EB70-4106-A770-246D473327AA}.Beta|Win32.ActiveCfg = Release|Win32
+		{C61F8D27-EB70-4106-A770-246D473327AA}.Beta|Win32.Build.0 = Release|Win32
+		{C61F8D27-EB70-4106-A770-246D473327AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C61F8D27-EB70-4106-A770-246D473327AA}.Debug|Win32.Build.0 = Debug|Win32
+		{C61F8D27-EB70-4106-A770-246D473327AA}.Release|Win32.ActiveCfg = Release|Win32
+		{C61F8D27-EB70-4106-A770-246D473327AA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

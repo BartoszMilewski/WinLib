@@ -1,0 +1,12 @@
+=Precompiled Headers
+RSWL uses precompiled headers, so it makes sense for applications based on RSWL to use them too. Otherwise you'll have to create all the basic include statements manually. WinTest doesn't add anything to the RSWL headers, so its precompiled.h is rather simple.
+ #if !defined (PRECOMPILED_H)
+ #define PRECOMPILED_H
+ #include <WinLibBase.h>
+ #endif
+The file WinLibBase.h is the RSWL precompiled header.
+
+The file precompiled.cpp is even simpler.
+ #include "precompiled.h"
+Note that, in all source files (not header files!) one must include "precompiled.h" before any other includes.
+

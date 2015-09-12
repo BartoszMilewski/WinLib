@@ -1,0 +1,35 @@
+=Commander
+The Commander object is the important part of the RSWL architecture. It is the center of execution of all user commands. Its methods are called with no arguments, since user commands coming from the menu or the toolbar have no arguments. If some information from the user is needed, the Commander elicits it from the user by, for instance, displaying a dialog box. In most cases it then calls the Model with the data obtained from the dialog dialog box to perform the required action.
+
+The Model doesn't have access to any UI (except for message boxes, which it can display through TheOutput object). If changes in the model require UI updates (and they often do!) a notification system can be used (not part of RSWL, but easily implemented using the Notify pattern).
+
+In WinTest, the Commander doesn't do much (and there is no Model!).
+ class Commander
+ {
+ public:
+    Commander (TopCtrl & ctrl)
+        : _ctrl (ctrl)
+    {}
+    void Program_Exit ();
+    Cmd::Status can_Program_Exit () const { return Cmd::Enabled; }
+    void Program_About ();
+ private:
+    TopCtrl    & _ctrl;
+ };
+The Commander usually requires access back to the Controller. Here this access will only be used to extract the handle to the top window.
+
+There are only two commands available in WinTest--Exit and About. Note that our naming convention is based on the names of menu items. Both commands here corresponds to menu items from the &quot;Program&quot; menu. Optionally, one can define methods that return the availability status of each command. For instance, can_Program_Exit is called (internally) when the Program menu is unrolled. It returns Cmd::Enabled, so the item will be always enabled. But it might also return other values, making the item either disabled or totally absent.
+
+The implementation of WinTest commands is rather trivial. Program_Exit destroys to top level window, thus closing the application.
+ void Commander::Program_Exit () 
+ {
+    _ctrl.GetWindow ().Destroy ();
+ }
+Program_About displays the about dialog. We can see here how simple it is to display a dialog using RSWL (more about it later). All we need is a dialog controller and the resource file with the visual layout of the dialog (the resource ID is kept in the specific dialog controller).
+ void Commander::Program_About ()
+ {
+    AboutDlgCtrl ctrl;
+    Dialog::Modal dlg (_ctrl.GetWindow (), ctrl);
+ }
+
+| Next: [[Command Vector]] |

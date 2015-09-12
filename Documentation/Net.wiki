@@ -1,0 +1,20 @@
+=Net
+* '''BitsDownloader.h'''/cpp: BITS::Downloader. Background internet downloader framework using Windows BITS service.
+* '''BITService.h'''/cpp: BITS::Service, Job, JobSeq, FileSeq, StatusCallbacks. The mechanisms used in BITS downloading.
+* '''Connection.h'''/cpp: Connection: Socket connection that can switch between simple socked and SSL.
+* '''Download.h''': DownloadSink, Downloader. Overridable interfaces used by BITS and FTP downloader.
+* '''Ftp.h'''/cpp: Ftp::Handle, AutoHandle, Session, FileSeq, RemoteFile, FileReadable, FileWritable. Encapsulation of FTP.
+* '''FtpDownloader.h'''/cpp: Ftp::Downloader. Background FTP downloader.
+* '''Internet.h'''/cpp: Internaet::Handle, AutoHandle, Access, Callback. Internet connection. Encapsulation of WinInet.
+* '''NetShare.h'''/cpp: Net::Path, LocalPath, Share. Directory sharing on LAN.
+* '''NetShare98.h'''/cpp: Net::Share98. Win 98 implementation of net sharing.
+* '''NetShareImpl.h''': Net::ShareImpl. Net share implementation interface.
+* '''NetShareNT.h'''/cpp: Net::ShareNT. Win NT implementation of net sharing.
+* '''SecureSocket.h'''/cpp: Schannel::Credentials, MessageLayout, BufferedSocket, SecurityContext, Codec, OutgoingMessage, '''SecureSocket'''. Secure sockets (SSL) on Windows implementation.
+* '''SharedObject.h''': Net::SharedObject, SharedFolder. Description of net share.
+* '''ShareEx.h'''/cpp: Net::ShareException.
+* '''ShareInfo98.h''': Net::ShareInfo50. Windows 98 net share descriptor.
+* '''ShareInfoNT.h''': Net::ShareInfo2, ShareInfo502. Windows NT net share descriptor.
+* '''SimpleSocket.h'''/cpp: SimpleSocket, HostName. Windows socket (non-secure).
+* '''Socket.h'''/cpp: WinSocks (initialization/deinitialization of the socket subsystem), Win::SocketException, Socket. Socke interface--common between secure and non-secure sockets.
+
